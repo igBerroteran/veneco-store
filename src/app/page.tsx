@@ -30,7 +30,7 @@ export default async function HomePage() {
             
             {/* Stars Arc Graphic */}
             <div className="flex items-center gap-1.5 text-neutral-400 dark:text-neutral-550">
-              {[...Array(8)].map((_, i) => (
+              {[...Array(7)].map((_, i) => (
                 <Star key={i} size={12} className="fill-current" />
               ))}
               <span className="font-mono text-xs uppercase tracking-[0.3em] ml-3 text-neutral-500 dark:text-neutral-400">
@@ -201,8 +201,8 @@ export default async function HomePage() {
 
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-10">
           
-          <div className="flex justify-center text-neutral-350 dark:text-neutral-500 gap-1.5">
-            {[...Array(8)].map((_, i) => (
+          <div className="flex justify-center text-neutral-350 dark:text-neutral-550 gap-1.5">
+            {[...Array(7)].map((_, i) => (
               <Star key={i} size={14} className="fill-current opacity-30 dark:opacity-20 text-neutral-800 dark:text-white" />
             ))}
           </div>
