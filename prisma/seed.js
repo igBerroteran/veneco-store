@@ -64,7 +64,7 @@ async function main() {
   const initialProducts = [
     {
       name: 'Gorra Negra Veneco',
-      description: 'Gorra snapback de alta calidad color negro con bordado blanco de la marca VENECO y sus 8 estrellas. Ajuste regulable para máxima comodidad y estilo streetwear.',
+      description: 'Gorra snapback de alta calidad color negro con bordado blanco de la marca VENECO y sus 7 estrellas. Ajuste regulable para máxima comodidad y estilo streetwear.',
       price: 25.00,
       image: '/products/veneco_black_cap.png',
       category: 'gorras',
@@ -73,7 +73,7 @@ async function main() {
     },
     {
       name: 'Gorra Blanca Veneco',
-      description: 'Gorra snapback blanca premium con bordado negro de la marca VENECO y sus 8 estrellas. Un clásico sobrio y moderno con un contraste impecable.',
+      description: 'Gorra snapback blanca premium con bordado negro de la marca VENECO y sus 7 estrellas. Un clásico sobrio y moderno con un contraste impecable.',
       price: 25.00,
       image: '/products/veneco_white_cap.png',
       category: 'gorras',
