@@ -1,0 +1,61 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("client") // "admin" o "client"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  image       String      // Ruta a la imagen (ej: "/products/veneco_black_cap.png")
+  category    String      // "camisas" o "gorras"
+  stock       Int         @default(10)
+  sizes       String      // Tallas separadas por comas (ej: "S,M,L,XL" o "Ajustable")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id])
+  customerEmail   String
+  customerName    String
+  shippingAddress String
+  total           Float
+  status          String      @default("pending") // "pending", "paid", "shipped", "completed", "cancelled"
+  stripeSessionId String?     @unique
+  adminNotes      String?     @default("")
+  trackingNumber  String?     @default("")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  size      String
+}
