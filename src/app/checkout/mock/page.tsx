@@ -48,27 +48,16 @@ function MockCheckoutContent() {
 
     const fetchOrderDetails = async () => {
       try {
-        const res = await fetch('/api/orders');
+        const res = await fetch(`/api/orders/${orderId}`);
         if (res.ok) {
-          const list = await res.json();
-          const found = list.find((o: any) => o.id === orderId);
-          if (found) {
-            setOrder(found);
-          } else {
-            const singleRes = await fetch(`/api/orders/${orderId}`);
-            if (singleRes.ok) {
-              const singleData = await singleRes.json();
-              setOrder(singleData);
-            } else {
-              setError('No se pudo cargar la orden');
-            }
-          }
+          const data = await res.json();
+          setOrder(data);
         } else {
-          setError('Error al conectar con el servidor');
+          setError('No se pudo cargar la orden');
         }
       } catch (err) {
         console.error(err);
-        setError('Error de conexión');
+        setError('Error al conectar con el servidor');
       } finally {
         setIsLoading(false);
       }
