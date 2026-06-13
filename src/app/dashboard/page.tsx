@@ -4,6 +4,7 @@ import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Calendar, Package, MapPin, CheckCircle, Clock, Truck, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
+import CancelOrderButton from './CancelOrderButton';
 
 export const revalidate = 0;
 
@@ -136,7 +137,12 @@ export default async function DashboardPage() {
                       </div>
                       <div className="space-y-1">
                         <p className="uppercase text-neutral-500">Estado</p>
-                        <div>{getStatusBadge(order.status)}</div>
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(order.status)}
+                          {order.status === 'pending' && (
+                            <CancelOrderButton orderId={order.id} />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

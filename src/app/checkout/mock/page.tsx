@@ -71,7 +71,7 @@ function MockCheckoutContent() {
     setIsProcessing(true);
 
     if (!success) {
-      router.push('/catalog?checkout_cancelled=true');
+      router.push(`/cart?checkout_cancelled=true&order_id=${orderId}`);
       return;
     }
 

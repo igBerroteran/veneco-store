@@ -37,10 +37,6 @@ export async function GET(request: Request, { params }: RouteParams) {
 export async function PUT(request: Request, { params }: RouteParams) {
   try {
     const session = await getSession();
-    if (!session || session.role !== 'admin') {
-      return NextResponse.json({ error: 'Acceso no autorizado' }, { status: 403 });
-    }
-
     const { id } = await params;
     const body = await request.json();
 
@@ -52,10 +48,23 @@ export async function PUT(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 });
     }
 
+    // Si no es administrador, restringir cambios a solo cancelación de pedidos pendientes
+    if (!session || session.role !== 'admin') {
+      if (body.status !== 'cancelled') {
+        return NextResponse.json({ error: 'Acceso no autorizado' }, { status: 403 });
+      }
+      if (existingOrder.status !== 'pending') {
+        return NextResponse.json({ error: 'Solo se pueden cancelar pedidos pendientes' }, { status: 400 });
+      }
+      if (existingOrder.userId && (!session || existingOrder.userId !== session.id)) {
+        return NextResponse.json({ error: 'Acceso no autorizado a este pedido' }, { status: 403 });
+      }
+    }
+
     const updateData: any = {};
     if (body.status !== undefined) updateData.status = body.status;
-    if (body.adminNotes !== undefined) updateData.adminNotes = body.adminNotes;
-    if (body.trackingNumber !== undefined) updateData.trackingNumber = body.trackingNumber;
+    if (body.adminNotes !== undefined && session?.role === 'admin') updateData.adminNotes = body.adminNotes;
+    if (body.trackingNumber !== undefined && session?.role === 'admin') updateData.trackingNumber = body.trackingNumber;
 
     const updatedOrder = await prisma.order.update({
       where: { id },
