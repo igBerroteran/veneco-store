@@ -8,9 +8,7 @@ let stripe: Stripe | null = null;
 
 if (!isMockStripe) {
   try {
-    stripe = new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: '2025-02-18.acacia' as any,
-    });
+    stripe = new Stripe(STRIPE_SECRET_KEY);
   } catch (err) {
     console.error('Error al inicializar Stripe:', err);
   }

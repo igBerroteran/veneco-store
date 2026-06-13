@@ -84,6 +84,8 @@ export default function AdminDashboardClient({
   const [newProductStock, setNewProductStock] = useState('10');
   const [newProductSizes, setNewProductSizes] = useState('S,M,L,XL');
   const [newProductImage, setNewProductImage] = useState('/products/veneco_black_shirt.png'); // Default asset
+  const [imageSourceType, setImageSourceType] = useState<'preset' | 'upload'>('preset');
+  const [uploadedImageBase64, setUploadedImageBase64] = useState('');
   const [newProductDescription, setNewProductDescription] = useState('');
   const [actionError, setActionError] = useState('');
   
@@ -150,8 +152,10 @@ export default function AdminDashboardClient({
     e.preventDefault();
     setActionError('');
 
-    if (!newProductName || !newProductPrice || !newProductSizes || !newProductDescription) {
-      setActionError('Todos los campos son obligatorios');
+    const imageToSend = imageSourceType === 'upload' ? uploadedImageBase64 : newProductImage;
+
+    if (!newProductName || !newProductPrice || !newProductSizes || !newProductDescription || !imageToSend) {
+      setActionError('Todos los campos son obligatorios (incluyendo la imagen)');
       return;
     }
 
@@ -163,7 +167,7 @@ export default function AdminDashboardClient({
           name: newProductName,
           description: newProductDescription,
           price: parseFloat(newProductPrice),
-          image: newProductImage,
+          image: imageToSend,
           category: newProductCategory,
           stock: parseInt(newProductStock),
           sizes: newProductSizes,
@@ -180,6 +184,8 @@ export default function AdminDashboardClient({
         setNewProductStock('10');
         setNewProductSizes(newProductCategory === 'gorras' ? 'Ajustable' : 'S,M,L,XL');
         setNewProductDescription('');
+        setUploadedImageBase64('');
+        setImageSourceType('preset');
         setShowAddProduct(false);
       } else {
         setActionError(data.error || 'Error al crear producto');
@@ -643,19 +649,95 @@ export default function AdminDashboardClient({
                   />
                 </div>
 
-                <div className="sm:col-span-2">
-                  <label className="block text-neutral-500 mb-1">Imagen (Selecciona una de las imágenes disponibles)</label>
-                  <select
-                    value={newProductImage}
-                    onChange={(e) => setNewProductImage(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 px-3 py-2 text-sm text-black dark:text-white focus:outline-none transition-colors rounded"
-                  >
-                    <option value="/products/veneco_black_shirt.png">Franela Negra Veneco (Generada)</option>
-                    <option value="/products/veneco_white_shirt.png">Franela Blanca Veneco (Generada)</option>
-                    <option value="/products/veneco_black_cap.png">Gorra Negra Veneco (Generada)</option>
-                    <option value="/products/veneco_white_cap.png">Gorra Blanca Veneco (Generada)</option>
-                    <option value="/products/veneco_guayabera.png">Guayabera "La Custodia" (Generada)</option>
-                  </select>
+                <div className="sm:col-span-2 space-y-3">
+                  <label className="block text-neutral-500 mb-1">Imagen del Producto</label>
+                  
+                  {/* Selector de tipo de imagen */}
+                  <div className="flex gap-4 mb-2">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-mono">
+                      <input 
+                        type="radio" 
+                        name="imageSourceType" 
+                        checked={imageSourceType === 'preset'}
+                        onChange={() => setImageSourceType('preset')}
+                        className="accent-black dark:accent-white"
+                      />
+                      Imágenes por Defecto
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-mono">
+                      <input 
+                        type="radio" 
+                        name="imageSourceType" 
+                        checked={imageSourceType === 'upload'}
+                        onChange={() => setImageSourceType('upload')}
+                        className="accent-black dark:accent-white"
+                      />
+                      Subir Foto Personalizada
+                    </label>
+                  </div>
+
+                  {imageSourceType === 'preset' ? (
+                    <select
+                      value={newProductImage}
+                      onChange={(e) => setNewProductImage(e.target.value)}
+                      className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 px-3 py-2 text-sm text-black dark:text-white focus:outline-none transition-colors rounded"
+                    >
+                      <option value="/products/veneco_black_shirt.png">Franela Negra Veneco (Generada)</option>
+                      <option value="/products/veneco_white_shirt.png">Franela Blanca Veneco (Generada)</option>
+                      <option value="/products/veneco_black_cap.png">Gorra Negra Veneco (Generada)</option>
+                      <option value="/products/veneco_white_cap.png">Gorra Blanca Veneco (Generada)</option>
+                      <option value="/products/veneco_guayabera.png">Guayabera "La Custodia" (Generada)</option>
+                    </select>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-center w-full">
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white rounded cursor-pointer transition-colors bg-neutral-50/50 dark:bg-neutral-900/10">
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <Plus className="w-8 h-8 text-neutral-400 mb-1" />
+                            <p className="text-xs text-neutral-500 font-mono uppercase tracking-wider">
+                              Haz clic para seleccionar imagen
+                            </p>
+                            <p className="text-[10px] text-neutral-400 font-mono mt-1">
+                              PNG, JPG o WEBP
+                            </p>
+                          </div>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            className="hidden" 
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  setUploadedImageBase64(reader.result as string);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                          />
+                        </label>
+                      </div>
+                      
+                      {uploadedImageBase64 && (
+                        <div className="flex items-center gap-4 p-3 border border-neutral-200 dark:border-neutral-850 rounded">
+                          <div className="h-16 w-14 overflow-hidden border border-neutral-200 dark:border-neutral-850 bg-white dark:bg-neutral-900 flex-shrink-0">
+                            <img src={uploadedImageBase64} alt="Vista previa" className="h-full w-full object-cover" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-[10px] uppercase text-green-650 dark:text-green-500 font-mono">✓ Imagen cargada correctamente</p>
+                            <button
+                              type="button"
+                              onClick={() => setUploadedImageBase64('')}
+                              className="text-[10px] font-mono text-red-500 hover:underline uppercase mt-1"
+                            >
+                              Eliminar foto
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="sm:col-span-2">

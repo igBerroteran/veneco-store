@@ -12,9 +12,7 @@ let stripe: Stripe | null = null;
 
 if (!isMockStripe) {
   try {
-    stripe = new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: '2025-02-18.acacia' as any, // Versión más reciente
-    });
+    stripe = new Stripe(STRIPE_SECRET_KEY);
   } catch (err) {
     console.error('Error al inicializar Stripe:', err);
   }
@@ -70,9 +68,20 @@ export async function POST(request: Request) {
     }
 
     // 2. Crear la orden temporal con estado "pending"
+    let userId: string | null = null;
+    if (session?.id) {
+      const dbUser = await prisma.user.findUnique({
+        where: { id: session.id },
+        select: { id: true },
+      });
+      if (dbUser) {
+        userId = session.id;
+      }
+    }
+
     const order = await prisma.order.create({
       data: {
-        userId: session?.id || null,
+        userId,
         customerEmail,
         customerName,
         shippingAddress,
