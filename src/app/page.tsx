@@ -2,11 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Star } from 'lucide-react';
 import { prisma } from '@/lib/db';
+import { Product } from '@prisma/client';
 
 export const revalidate = 0; // Evitar almacenamiento en caché para reflejar stock actual
 
 export default async function HomePage() {
-  let products: any[] = [];
+  let products: Product[] = [];
   try {
     products = await prisma.product.findMany({
       take: 4,
@@ -44,7 +45,7 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-xl sm:text-2xl font-serif italic text-neutral-700 dark:text-neutral-300 max-w-2xl font-light tracking-wide leading-relaxed">
-              "De un insulto, sacamos un gramy."
+              &ldquo;De un insulto, sacamos un gramy.&rdquo;
             </p>
 
             <p className="text-sm text-neutral-605 dark:text-neutral-400 max-w-lg leading-relaxed font-sans">
@@ -212,7 +213,7 @@ export default async function HomePage() {
           </p>
 
           <blockquote className="font-serif italic text-3xl sm:text-5xl leading-snug tracking-wide text-neutral-805 dark:text-neutral-200 transition-colors">
-            "Durante años, la palabra <span className="text-black dark:text-white not-italic font-sans font-black underline decoration-neutral-300 dark:decoration-neutral-800 decoration-4 underline-offset-8">VENECO</span> fue usada con condescendencia, prejuicio e incluso desprecio en tierras ajenas. Pero en el asfalto y el orgullo venezolano hay una regla de oro: la creatividad y la resistencia son infinitas. De ese mismo insulto, hoy tejemos alta costura, de la crítica sacamos arte, y de un insulto... sacamos un Grammy."
+            &ldquo;Durante años, la palabra <span className="text-black dark:text-white not-italic font-sans font-black underline decoration-neutral-300 dark:decoration-neutral-800 decoration-4 underline-offset-8">VENECO</span> fue usada con condescendencia, prejuicio e incluso desprecio en tierras ajenas. Pero en el asfalto y el orgullo venezolano hay una regla de oro: la creatividad y la resistencia son infinitas. De ese mismo insulto, hoy tejemos alta costura, de la crítica sacamos arte, y de un insulto... sacamos un Grammy.&rdquo;
           </blockquote>
 
           <div className="h-0.5 w-16 bg-neutral-300 dark:bg-neutral-850 mx-auto" />

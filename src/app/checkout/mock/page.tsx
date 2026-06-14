@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CreditCard, ShieldCheck, XCircle, ArrowLeft, Loader } from 'lucide-react';
 import Link from 'next/link';
@@ -35,16 +35,12 @@ function MockCheckoutContent() {
   const sessionId = searchParams.get('session_id') || '';
 
   const [order, setOrder] = useState<OrderDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!orderId);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(!orderId ? 'Falta ID de pedido' : '');
 
   useEffect(() => {
-    if (!orderId) {
-      setError('Falta ID de pedido');
-      setIsLoading(false);
-      return;
-    }
+    if (!orderId) return;
 
     const fetchOrderDetails = async () => {
       try {
@@ -89,8 +85,8 @@ function MockCheckoutContent() {
       }
 
       router.push(`/checkout/success?session_id=${sessionId}&order_id=${orderId}`);
-    } catch (err: any) {
-      alert(err.message || 'Error al procesar el pago simulado');
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Error al procesar el pago simulado');
       setIsProcessing(false);
     }
   };  if (isLoading) {

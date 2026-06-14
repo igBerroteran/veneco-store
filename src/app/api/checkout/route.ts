@@ -110,7 +110,7 @@ export async function POST(request: Request) {
     }
 
     // 4. Si Stripe está configurado correctamente, crear sesión Stripe Checkout
-    const lineItems = items.map((item: any) => ({
+    const lineItems = items.map((item: { name: string; image: string; price: number; quantity: number }) => ({
       price_data: {
         currency: 'usd',
         product_data: {
@@ -141,10 +141,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ url: stripeSession.url });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error en checkout:', error);
+    const message = error instanceof Error ? error.message : 'Error al procesar el pago';
     return NextResponse.json(
-      { error: error.message || 'Error al procesar el pago' },
+      { error: message },
       { status: 500 }
     );
   }

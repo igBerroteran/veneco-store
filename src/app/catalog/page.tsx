@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
+import { Product } from '@prisma/client';
 
 export const revalidate = 0; // Garantiza stock en tiempo real
 
@@ -17,7 +18,7 @@ export default async function CatalogPage({
   // Filtrar según categoría
   const whereClause = currentCategory ? { category: currentCategory } : {};
 
-  let products: any[] = [];
+  let products: Product[] = [];
   try {
     products = await prisma.product.findMany({
       where: whereClause,

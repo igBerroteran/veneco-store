@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ShoppingBag, User, LogOut, ShieldAlert, Menu, X, Sun, Moon } from 'lucide-react';
+import { ShoppingBag, LogOut, ShieldAlert, Menu, X, Sun, Moon } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 interface UserSession {
@@ -33,11 +33,14 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    fetchSession();
-    // Leer tema de localStorage
-    const savedTheme = localStorage.getItem('veneco_theme') || 'dark';
-    setTheme(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    const initialize = async () => {
+      await fetchSession();
+      // Leer tema de localStorage
+      const savedTheme = localStorage.getItem('veneco_theme') || 'dark';
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    };
+    initialize();
   }, [pathname]);
 
   const toggleTheme = () => {

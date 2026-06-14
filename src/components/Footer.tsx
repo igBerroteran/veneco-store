@@ -23,7 +23,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="font-serif italic text-lg text-neutral-800 dark:text-neutral-200 max-w-sm tracking-wide">
-              "De un insulto, sacamos un gramy."
+              &ldquo;De un insulto, sacamos un gramy.&rdquo;
             </p>
             <p className="text-xs text-neutral-600 dark:text-neutral-500 max-w-xs leading-relaxed font-sans">
               Reclamando lo nuestro. Diseño de alta costura urbana, minimalista y de alto contraste inspirado en la venezolanidad.

@@ -2,9 +2,16 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { Calendar, Package, MapPin, CheckCircle, Clock, Truck, ShieldAlert } from 'lucide-react';
+import { Calendar, Package, MapPin, CheckCircle, Clock, Truck } from 'lucide-react';
 import Link from 'next/link';
 import CancelOrderButton from './CancelOrderButton';
+import { Order, OrderItem, Product } from '@prisma/client';
+
+type OrderWithItems = Order & {
+  items: (OrderItem & {
+    product: Product;
+  })[];
+};
 
 export const revalidate = 0;
 
@@ -21,7 +28,7 @@ export default async function DashboardPage() {
   }
 
   // Buscar las órdenes de este cliente
-  let orders: any[] = [];
+  let orders: OrderWithItems[] = [];
   try {
     orders = await prisma.order.findMany({
       where: { userId: session.id },
@@ -216,7 +223,7 @@ export default async function DashboardPage() {
 
                   {/* Order Items */}
                   <div className="space-y-4">
-                    {order.items.map((item: any) => (
+                    {order.items.map((item) => (
                       <div key={item.id} className="flex gap-4 items-center">
                         <div className="h-16 w-14 overflow-hidden border border-neutral-200 dark:border-neutral-900 bg-white dark:bg-neutral-900 flex-shrink-0">
                           <img 

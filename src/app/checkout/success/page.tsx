@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { CheckCircle2, ShoppingBag, ArrowRight, Loader } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
@@ -15,23 +15,18 @@ interface OrderDetails {
 import { Suspense } from 'react';
 
 function SuccessContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || '';
-  const sessionId = searchParams.get('session_id') || '';
 
   const { clearCart } = useCart();
   const [order, setOrder] = useState<OrderDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!orderId);
 
   // Limpiar el carrito y traer información de la orden
   useEffect(() => {
     clearCart();
 
-    if (!orderId) {
-      setIsLoading(false);
-      return;
-    }
+    if (!orderId) return;
 
     const fetchOrder = async () => {
       try {
@@ -48,7 +43,7 @@ function SuccessContent() {
     };
 
     fetchOrder();
-  }, [orderId]);
+  }, [orderId, clearCart]);
 
   if (isLoading) {
     return (
@@ -103,7 +98,7 @@ function SuccessContent() {
 
         <div className="space-y-4 pt-4 font-mono text-xs">
           <p className="font-serif italic text-sm text-neutral-500 dark:text-neutral-400">
-            "De un insulto, sacamos un Grammy."
+            &ldquo;De un insulto, sacamos un Grammy.&rdquo;
           </p>
           <p className="text-[11px] text-neutral-550 max-w-xs mx-auto font-sans leading-relaxed">
             Te hemos enviado un correo de confirmación de compra con los detalles del envío. Tu pedido llegará pronto.

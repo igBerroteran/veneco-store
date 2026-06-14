@@ -85,10 +85,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, order: updatedOrder, message: 'Pago verificado y stock actualizado' });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error al verificar orden:', error);
+    const message = error instanceof Error ? error.message : 'Error interno al verificar el pago';
     return NextResponse.json(
-      { error: error.message || 'Error interno al verificar el pago' },
+      { error: message },
       { status: 500 }
     );
   }

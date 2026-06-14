@@ -86,9 +86,9 @@ export default function CartDrawer() {
         setIsCartOpen(false);
         router.push(data.url);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setErrorMessage(err.message || 'Ocurrió un error inesperado');
+      setErrorMessage(err instanceof Error ? err.message : 'Ocurrió un error inesperado');
       setIsSubmitting(false);
     }
   };

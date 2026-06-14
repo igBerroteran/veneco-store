@@ -61,7 +61,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
       }
     }
 
-    const updateData: any = {};
+    const updateData: {
+      status?: string;
+      adminNotes?: string;
+      trackingNumber?: string;
+    } = {};
     if (body.status !== undefined) updateData.status = body.status;
     if (body.adminNotes !== undefined && session?.role === 'admin') updateData.adminNotes = body.adminNotes;
     if (body.trackingNumber !== undefined && session?.role === 'admin') updateData.trackingNumber = body.trackingNumber;

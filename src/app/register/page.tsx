@@ -33,8 +33,8 @@ export default function RegisterPage() {
 
       router.refresh();
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message || 'Error de conexión');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error de conexión');
       setIsLoading(false);
     }
   };

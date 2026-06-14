@@ -1,0 +1,15 @@
+{
+  "loop_name": "Veneco_Store_Build_Refactor_Loop",
+  "engine": "fable-5",
+  "max_iterations": 25,
+  "mcp_servers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  },
+  "quality_gates": [
+    "npm run lint",
+    "npm run build"
+  ]
+}

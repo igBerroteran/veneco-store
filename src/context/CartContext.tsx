@@ -32,15 +32,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Cargar carrito desde localStorage al montar
   useEffect(() => {
-    const storedCart = localStorage.getItem('veneco_cart');
-    if (storedCart) {
-      try {
-        setCartItems(JSON.parse(storedCart));
-      } catch (e) {
-        console.error('Error al parsear el carrito guardado:', e);
+    const timer = setTimeout(() => {
+      const storedCart = localStorage.getItem('veneco_cart');
+      if (storedCart) {
+        try {
+          setCartItems(JSON.parse(storedCart));
+        } catch (e) {
+          console.error('Error al parsear el carrito guardado:', e);
+        }
       }
-    }
-    setMounted(true);
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Guardar carrito en localStorage cuando cambie

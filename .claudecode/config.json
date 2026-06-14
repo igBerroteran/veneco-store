@@ -1,0 +1,6 @@
+{
+  "goal": {
+    "maxTurns": 30,
+    "autoApprove": false
+  }
+}

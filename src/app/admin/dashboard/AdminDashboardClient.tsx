@@ -11,10 +11,8 @@ import {
   ChevronDown, 
   ChevronUp, 
   Brain, 
-  BookOpen, 
   TrendingUp, 
   BarChart2, 
-  Users, 
   ArrowUpRight 
 } from 'lucide-react';
 
@@ -686,7 +684,7 @@ export default function AdminDashboardClient({
                       <option value="/products/veneco_white_shirt.png">Franela Blanca Veneco (Generada)</option>
                       <option value="/products/veneco_black_cap.png">Gorra Negra Veneco (Generada)</option>
                       <option value="/products/veneco_white_cap.png">Gorra Blanca Veneco (Generada)</option>
-                      <option value="/products/veneco_guayabera.png">Guayabera "La Custodia" (Generada)</option>
+                      <option value="/products/veneco_guayabera.png">{"Guayabera \"La Custodia\" (Generada)"}</option>
                     </select>
                   ) : (
                     <div className="space-y-3">
@@ -1002,7 +1000,7 @@ export default function AdminDashboardClient({
 
           {/* Intro quote */}
           <div className="border-l-4 border-black dark:border-l-white pl-4 font-serif italic text-lg text-neutral-700 dark:text-neutral-350">
-            "Según un informe del MIT del verano de 2025, el 95 % de los pilotos de IA generativa están fracasando. Es una cifra que da que pensar, teniendo en cuenta los miles de millones de dólares que se han invertido. Las apuestas son astronómicamente altas."
+            &ldquo;Según un informe del MIT del verano de 2025, el 95 % de los pilotos de IA generativa están fracasando. Es una cifra que da que pensar, teniendo en cuenta los miles de millones de dólares que se han invertido. Las apuestas son astronómicamente altas.&rdquo;
           </div>
 
           <p className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -1159,13 +1157,13 @@ export default function AdminDashboardClient({
               <span className="font-mono text-sm text-neutral-400">05 /</span> Pensar más allá del ROI
             </h2>
             <p className="text-sm text-neutral-700 dark:text-neutral-300">
-              El CEO de Nvidia, Jensen Huang, sugirió considerar esta etapa temprana como de "experimentación desordenada". Comparar la exigencia inmediata de un ROI tangible para proyectos de IA en fase inicial con pedirle a un niño un plan de negocios formal para su hobby puede sofocar la verdadera innovación.
+              El CEO de Nvidia, Jensen Huang, sugirió considerar esta etapa temprana como de &ldquo;experimentación desordenada&rdquo;. Comparar la exigencia inmediata de un ROI tangible para proyectos de IA en fase inicial con pedirle a un niño un plan de negocios formal para su hobby puede sofocar la verdadera innovación.
             </p>
             <blockquote className="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4 py-1 text-sm italic text-neutral-600 dark:text-neutral-400">
-              “Cuando sus hijos le digan que quieren probar algo, debe decirles que sí. En casa nunca nos hacemos preguntas como ¿Cuál es el retorno de la inversión aquí?”
+              &ldquo;Cuando sus hijos le digan que quieren probar algo, debe decirles que sí. En casa nunca nos hacemos preguntas como ¿Cuál es el retorno de la inversión aquí?&rdquo;
             </blockquote>
             <p className="text-sm text-neutral-700 dark:text-neutral-300">
-              Huang aconseja desarrollar capacidades de infraestructura propias en lugar de externalizar todo. Fomentar que "florezcan mil flores" y priorizar el aprendizaje práctico e iterativo colocará a la empresa en posición de liderar en la era de los agentes autónomos de 2026.
+              Huang aconseja desarrollar capacidades de infraestructura propias en lugar de externalizar todo. Fomentar que &ldquo;florezcan mil flores&rdquo; y priorizar el aprendizaje práctico e iterativo colocará a la empresa en posición de liderar en la era de los agentes autónomos de 2026.
             </p>
           </div>
 

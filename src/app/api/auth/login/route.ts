@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
-import { signToken } from '@/lib/auth';
+import { signToken, signRefreshToken } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -35,8 +35,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Crear sesión (JWT Token)
+    // Crear sesión (JWT Tokens)
     const token = signToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    });
+    const refreshToken = signRefreshToken({
       id: user.id,
       email: user.email,
       role: user.role,
@@ -48,9 +54,19 @@ export async function POST(request: Request) {
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
 
+    const isProd = process.env.NODE_ENV === 'production';
+
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProd,
+      sameSite: 'strict',
+      maxAge: 60 * 60, // 1 hora
+      path: '/',
+    });
+
+    response.cookies.set('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: isProd,
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 7, // 7 días
       path: '/',

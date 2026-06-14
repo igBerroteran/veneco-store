@@ -10,8 +10,6 @@ import {
   ShoppingBag, 
   ArrowRight, 
   MapPin, 
-  Calendar, 
-  CreditCard, 
   Loader 
 } from 'lucide-react';
 import Link from 'next/link';
@@ -50,7 +48,7 @@ function CartPageContent() {
   const orderId = searchParams.get('order_id') || '';
 
   const [order, setOrder] = useState<OrderDetails | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!!(checkoutCancelled && orderId));
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -58,7 +56,6 @@ function CartPageContent() {
   // 1. Cargar detalles del pedido si fue cancelado
   useEffect(() => {
     if (checkoutCancelled && orderId) {
-      setLoading(true);
       fetch(`/api/orders/${orderId}`)
         .then((res) => {
           if (!res.ok) throw new Error('No se pudo cargar la información del pedido.');
@@ -100,9 +97,9 @@ function CartPageContent() {
 
       setSuccessMsg('Tu pedido ha sido cancelado con éxito.');
       setOrder(null);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || 'Ocurrió un error al intentar cancelar.');
+      setError(err instanceof Error ? err.message : 'Ocurrió un error al intentar cancelar.');
     } finally {
       setActionLoading(false);
     }
@@ -146,9 +143,9 @@ function CartPageContent() {
       
       // Redirigir al catálogo para que puedan seguir editando o reintentar
       router.push('/catalog?edited_order=true');
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || 'Ocurrió un error al cargar los productos al carrito.');
+      setError(err instanceof Error ? err.message : 'Ocurrió un error al cargar los productos al carrito.');
       setActionLoading(false);
     }
   };

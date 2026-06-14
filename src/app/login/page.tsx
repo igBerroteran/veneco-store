@@ -38,8 +38,8 @@ export default function LoginPage() {
       } else {
         router.push('/dashboard');
       }
-    } catch (err: any) {
-      setError(err.message || 'Error de conexión');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error de conexión');
       setIsLoading(false);
     }
   };
